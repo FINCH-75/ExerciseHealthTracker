@@ -1,4 +1,5 @@
 // Your web app's Firebase configuration
+// Your Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyAQK4TSZ3V4j1k8ynOY_8dSVFY3yIW8LFY",
   authDomain: "exercise-health-tracker.firebaseapp.com",
@@ -12,6 +13,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
+
 
 // Example: Checking Firebase connection
 console.log("Firebase initialized:", firebase);
