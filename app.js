@@ -1,4 +1,3 @@
-// Your web app's Firebase configuration
 // Your Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyAQK4TSZ3V4j1k8ynOY_8dSVFY3yIW8LFY",
@@ -11,12 +10,14 @@ const firebaseConfig = {
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
+
+// Firebase services
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-
-// Example: Checking Firebase connection
+// Example: Checking Firebase initialization
 console.log("Firebase initialized:", firebase);
+
 
 
 // Elements
