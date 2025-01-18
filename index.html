@@ -14,10 +14,20 @@
     <form id="tracker-form">
       <h2>Add Exercise Entry</h2>
       <label for="exercise">Exercise Type:</label>
-      <input type="text" id="exercise" name="exercise" placeholder="e.g., Running" required>
+      <select id="exercise" name="exercise" required>
+        <option value="Running">Running</option>
+        <option value="Cycling">Cycling</option>
+        <option value="Walking">Walking</option>
+        <option value="Weightlifting">Weightlifting</option>
+        <option value="Custom">Custom (Enter below)</option>
+      </select>
+      <input type="text" id="custom-exercise" name="custom-exercise" placeholder="Enter custom exercise">
 
       <label for="duration">Duration (minutes):</label>
       <input type="number" id="duration" name="duration" placeholder="e.g., 30" required>
+
+      <label for="weight">Your Weight (lbs):</label>
+      <input type="number" id="weight" name="weight" placeholder="e.g., 180" required>
 
       <label for="date">Date:</label>
       <input type="date" id="date" name="date" required>

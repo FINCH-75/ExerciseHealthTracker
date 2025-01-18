@@ -2,6 +2,15 @@
 const trackerForm = document.getElementById('tracker-form');
 const entriesList = document.getElementById('entries-list');
 
+// Calorie burn rates (calories burned per minute per pound)
+const calorieBurnRates = {
+  Running: 0.0175 * 10,
+  Cycling: 0.0175 * 8,
+  Walking: 0.0175 * 3.8,
+  Weightlifting: 0.0175 * 6,
+  Custom: 0.0175 * 5, // Default rate for custom exercises
+};
+
 // Load entries from localStorage
 function loadEntries() {
   const entries = JSON.parse(localStorage.getItem('exerciseEntries')) || [];
@@ -9,7 +18,7 @@ function loadEntries() {
   entries.forEach((entry, index) => {
     const li = document.createElement('li');
     li.innerHTML = `
-      <strong>${entry.date}</strong>: ${entry.exercise} for ${entry.duration} minutes
+      <span><strong>${entry.date}</strong>: ${entry.exercise} for ${entry.duration} minutes (${entry.caloriesBurned} cal)</span>
       <button data-index="${index}" class="delete-btn">Delete</button>
     `;
     entriesList.appendChild(li);
@@ -22,6 +31,12 @@ function loadEntries() {
       deleteEntry(index);
     });
   });
+}
+
+// Calculate calories burned
+function calculateCalories(exercise, duration, weight) {
+  const burnRate = calorieBurnRates[exercise] || calorieBurnRates["Custom"];
+  return Math.round(burnRate * weight * duration);
 }
 
 // Save entry to localStorage
@@ -43,11 +58,17 @@ function deleteEntry(index) {
 // Handle form submission
 trackerForm.addEventListener('submit', (e) => {
   e.preventDefault();
+
   const exercise = document.getElementById('exercise').value;
+  const customExercise = document.getElementById('custom-exercise').value;
   const duration = document.getElementById('duration').value;
+  const weight = document.getElementById('weight').value;
   const date = document.getElementById('date').value;
 
-  saveEntry({ exercise, duration, date });
+  const exerciseType = exercise === "Custom" ? customExercise : exercise;
+  const caloriesBurned = calculateCalories(exerciseType, duration, weight);
+
+  saveEntry({ exercise: exerciseType, duration, date, caloriesBurned });
   trackerForm.reset();
 });
 
