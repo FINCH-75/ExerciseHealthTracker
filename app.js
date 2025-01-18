@@ -1,3 +1,22 @@
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyAQK4TSZ3V4j1k8ynOY_8dSVFY3yIW8LFY",
+  authDomain: "exercise-health-tracker.firebaseapp.com",
+  projectId: "exercise-health-tracker",
+  storageBucket: "exercise-health-tracker.appspot.com",
+  messagingSenderId: "28861689607",
+  appId: "1:28861689607:web:b9c299de0db98ebb6e9fa2"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+// Example: Checking Firebase connection
+console.log("Firebase initialized:", firebase);
+
+
 // Elements
 const trackerForm = document.getElementById('tracker-form');
 const entriesList = document.getElementById('entries-list');
