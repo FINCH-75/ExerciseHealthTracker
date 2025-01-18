@@ -124,4 +124,10 @@ trackerForm.addEventListener("submit", (e) => {
 });
 
 // Initialize the app
-loadEntries();
+auth.onAuthStateChanged((user) => {
+  if (user) {
+    loadEntries();
+  } else {
+    entriesList.innerHTML = "<p>Please log in to view your entries.</p>";
+  }
+});
