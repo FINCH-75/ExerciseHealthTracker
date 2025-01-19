@@ -3,7 +3,7 @@ const SUPABASE_URL = "https://fvymmmusiargiibfeuyb.supabase.co";
 const SUPABASE_ANON_KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2eW1tbXVzaWFyZ2lpYmZldXliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzczMTM1OTIsImV4cCI6MjA1Mjg4OTU5Mn0.WXMvsI08VyNq4URu-Fz59cDDIsRPHIDoGF2IdP5JaUA";
 
-// Initialize Supabase using the global `supabase` object
+// Initialize Supabase
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // Elements
@@ -14,7 +14,6 @@ const leaderboardTable = document.getElementById("leaderboard").querySelector("t
 const userEntriesList = document.getElementById("user-entries");
 const displayName = document.getElementById("display-name");
 
-// Global variable for the current user
 let currentUser = "";
 
 // Save entry to Supabase
@@ -22,12 +21,13 @@ async function saveEntry(entry) {
   const { data, error } = await supabase.from("exercise_entries").insert([entry]);
   if (error) {
     console.error("Error saving entry:", error);
+    alert("Failed to save entry. Please try again.");
   } else {
     console.log("Entry saved successfully:", data);
   }
 }
 
-// Fetch all entries from Supabase
+// Fetch all entries
 async function loadEntries() {
   const { data, error } = await supabase.from("exercise_entries").select("*");
   if (error) {
@@ -37,17 +37,30 @@ async function loadEntries() {
   return data;
 }
 
-// Fetch leaderboard from Supabase
+// Fetch leaderboard
 async function loadLeaderboard() {
   const { data, error } = await supabase
     .from("exercise_entries")
     .select("name, calories_burned")
     .order("calories_burned", { ascending: false });
+
   if (error) {
     console.error("Error loading leaderboard:", error);
     return [];
   }
   return data;
+}
+
+// Refresh leaderboard
+async function refreshLeaderboard() {
+  const leaderboard = await loadLeaderboard();
+
+  leaderboardTable.innerHTML = "";
+  leaderboard.forEach(({ name, calories_burned }) => {
+    const row = document.createElement("tr");
+    row.innerHTML = `<td>${name}</td><td>${calories_burned}</td>`;
+    leaderboardTable.appendChild(row);
+  });
 }
 
 // Refresh user entries
@@ -63,18 +76,6 @@ async function refreshUserEntries() {
   });
 }
 
-// Refresh leaderboard
-async function refreshLeaderboard() {
-  const leaderboard = await loadLeaderboard();
-
-  leaderboardTable.innerHTML = "";
-  leaderboard.forEach(({ name, calories_burned }) => {
-    const row = document.createElement("tr");
-    row.innerHTML = `<td>${name}</td><td>${calories_burned}</td>`;
-    leaderboardTable.appendChild(row);
-  });
-}
-
 // Handle name form submission
 nameForm.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -82,7 +83,6 @@ nameForm.addEventListener("submit", async (e) => {
 
   if (!currentUser) return;
 
-  // Update UI
   displayName.textContent = currentUser;
   nameForm.classList.add("hidden");
   trackerSection.classList.remove("hidden");
@@ -113,7 +113,7 @@ trackerForm.addEventListener("submit", async (e) => {
     date,
   };
 
-  await saveEntry(entry); // Save to Supabase
+  await saveEntry(entry);
   await refreshUserEntries();
   await refreshLeaderboard();
   trackerForm.reset();
