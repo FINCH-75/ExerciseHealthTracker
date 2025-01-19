@@ -1,9 +1,9 @@
 body {
   font-family: Arial, sans-serif;
+  background-color: #f4f4f9;
+  color: #333;
   margin: 0;
   padding: 0;
-  background-color: #f8f9fa;
-  color: #333;
 }
 
 header {
@@ -17,8 +17,8 @@ header {
 form {
   margin: 20px auto;
   max-width: 600px;
-  background: white;
   padding: 20px;
+  background: white;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
@@ -45,10 +45,6 @@ button {
 
 button:hover {
   background-color: #45a049;
-}
-
-.hidden {
-  display: none;
 }
 
 table {
