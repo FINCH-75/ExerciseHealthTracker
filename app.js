@@ -81,7 +81,7 @@ trackerForm.addEventListener("submit", (e) => {
   e.preventDefault();
 
   const exercise = document.getElementById("exercise").value;
-  const customExercise = document.getElementById("custom-exercise").value;
+  const customExercise = document.getElementById("custom-exercise").value.trim();
   const duration = parseInt(document.getElementById("duration").value, 10);
   const weight = parseInt(document.getElementById("weight").value, 10);
   const date = new Date().toLocaleDateString();
@@ -99,10 +99,4 @@ trackerForm.addEventListener("submit", (e) => {
   saveData(data);
 
   // Refresh UI
-  loadUserEntries();
-  loadLeaderboard();
-  trackerForm.reset();
-});
-
-// Initialize leaderboard on load
-loadLeaderboard();
+  load
