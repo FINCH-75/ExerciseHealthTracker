@@ -1,22 +1,16 @@
-<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
+// Firebase configuration
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT_ID.appspot.com",
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
 
-  // Your web app's Firebase configuration
-  const firebaseConfig = {
-    apiKey: "AIzaSyAHkjoPmkZ6Wwq6MnlUtJ2d33l_F4MFzDs",
-    authDomain: "exercisehealthtracker-36b52.firebaseapp.com",
-    projectId: "exercisehealthtracker-36b52",
-    storageBucket: "exercisehealthtracker-36b52.firebasestorage.app",
-    messagingSenderId: "174126368246",
-    appId: "1:174126368246:web:00de11e46a2025d8ebf3d7"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-</script>
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
 // Elements
 const nameForm = document.getElementById("name-form");
