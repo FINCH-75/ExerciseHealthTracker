@@ -1,66 +1,69 @@
-<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
+// Elements
+const trackerForm = document.getElementById("tracker-form");
+const leaderboardTable = document.getElementById("leaderboard").querySelector("tbody");
 
-  // Your web app's Firebase configuration
-  const firebaseConfig = {
-    apiKey: "AIzaSyA44ToLHpJtSF-uJyO7OD0-HiVDmHnaK6s",
-    authDomain: "exercisehealthtracker.firebaseapp.com",
-    projectId: "exercisehealthtracker",
-    storageBucket: "exercisehealthtracker.firebasestorage.app",
-    messagingSenderId: "434460654537",
-    appId: "1:434460654537:web:4bf833a40a27eea8b18618"
-  };
+// Calorie burn rates (calories per minute per pound)
+const calorieBurnRates = {
+  Running: 0.0175 * 10,
+  Cycling: 0.0175 * 8,
+  Walking: 0.0175 * 3.8,
+  Weightlifting: 0.0175 * 6,
+  Custom: 0.0175 * 5, // Default rate for custom exercises
+};
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-</script>
+// Load leaderboard from localStorage
+function loadLeaderboard() {
+  const leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
+  leaderboardTable.innerHTML = "";
 
-// Save exercise entry to Firestore
-async function saveEntry(entry) {
-  try {
-    await db.collection("entries").add(entry);
-    console.log("Entry saved successfully:", entry);
-    loadEntries();
-  } catch (error) {
-    console.error("Error saving entry:", error);
-  }
+  leaderboard
+    .sort((a, b) => b.calories - a.calories) // Sort by calories in descending order
+    .forEach((entry) => {
+      const row = document.createElement("tr");
+      row.innerHTML = `<td>${entry.name}</td><td>${entry.calories}</td>`;
+      leaderboardTable.appendChild(row);
+    });
 }
 
-// Load entries from Firestore
-async function loadEntries() {
-  try {
-    const snapshot = await db.collection("entries").get();
-    entriesList.innerHTML = "";
-    snapshot.forEach(doc => {
-      const entry = doc.data();
-      const li = document.createElement("li");
-      li.textContent = `${entry.date}: ${entry.exercise} for ${entry.duration} minutes (${entry.caloriesBurned} cal)`;
-      entriesList.appendChild(li);
-    });
-  } catch (error) {
-    console.error("Error loading entries:", error);
-  }
+// Save leaderboard to localStorage
+function saveLeaderboard(leaderboard) {
+  localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
 }
 
 // Handle form submission
 trackerForm.addEventListener("submit", (e) => {
   e.preventDefault();
 
+  const name = document.getElementById("name").value.trim();
   const exercise = document.getElementById("exercise").value;
-  const customExercise = document.getElementById("custom-exercise").value;
   const duration = parseInt(document.getElementById("duration").value, 10);
   const weight = parseInt(document.getElementById("weight").value, 10);
-  const date = document.getElementById("date").value;
 
-  const exerciseType = exercise === "Custom" ? customExercise : exercise;
-  const caloriesBurned = Math.round(0.0175 * duration * weight);
+  if (!name || !duration || !weight) {
+    alert("Please fill out all fields.");
+    return;
+  }
 
-  saveEntry({ exercise: exerciseType, duration, weight, date, caloriesBurned });
+  // Calculate calories burned
+  const burnRate = calorieBurnRates[exercise] || calorieBurnRates["Custom"];
+  const caloriesBurned = Math.round(burnRate * weight * duration);
+
+  // Update leaderboard
+  const leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
+  const userEntry = leaderboard.find((entry) => entry.name === name);
+
+  if (userEntry) {
+    userEntry.calories += caloriesBurned;
+  } else {
+    leaderboard.push({ name, calories: caloriesBurned });
+  }
+
+  saveLeaderboard(leaderboard);
+  loadLeaderboard();
+
+  // Reset the form
   trackerForm.reset();
 });
 
-// Load entries on page load
-loadEntries();
+// Initialize the leaderboard
+loadLeaderboard();
