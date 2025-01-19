@@ -1,108 +1,47 @@
-// Your Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyAQK4TSZ3V4j1k8ynOY_8dSVFY3yIW8LFY",
-  authDomain: "exercise-health-tracker.firebaseapp.com",
-  projectId: "exercise-health-tracker",
-  storageBucket: "exercise-health-tracker.appspot.com",
-  messagingSenderId: "28861689607",
-  appId: "1:28861689607:web:b9c299de0db98ebb6e9fa2"
-};
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
 
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyA44ToLHpJtSF-uJyO7OD0-HiVDmHnaK6s",
+    authDomain: "exercisehealthtracker.firebaseapp.com",
+    projectId: "exercisehealthtracker",
+    storageBucket: "exercisehealthtracker.firebasestorage.app",
+    messagingSenderId: "434460654537",
+    appId: "1:434460654537:web:4bf833a40a27eea8b18618"
+  };
 
-// Log Firebase initialization success
-console.log("Firebase initialized successfully");
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+</script>
 
-// Elements
-const trackerForm = document.getElementById('tracker-form');
-const entriesList = document.getElementById('entries-list');
-
-// Calorie burn rates (calories burned per minute per pound)
-const calorieBurnRates = {
-  Running: 0.0175 * 10,
-  Cycling: 0.0175 * 8,
-  Walking: 0.0175 * 3.8,
-  Weightlifting: 0.0175 * 6,
-  Custom: 0.0175 * 5, // Default rate for custom exercises
-};
-
-// Calculate calories burned
-function calculateCalories(exercise, duration, weight) {
-  const burnRate = calorieBurnRates[exercise] || calorieBurnRates["Custom"];
-  return Math.round(burnRate * weight * duration);
-}
-
-// Save entry to Firestore
+// Save exercise entry to Firestore
 async function saveEntry(entry) {
-  const user = auth.currentUser;
-  if (!user) {
-    alert("You must be logged in to save an entry!");
-    return;
-  }
-
   try {
-    await db.collection("users").doc(user.uid).collection("entries").add(entry);
+    await db.collection("entries").add(entry);
     console.log("Entry saved successfully:", entry);
-    loadEntries(); // Refresh the entries list
+    loadEntries();
   } catch (error) {
     console.error("Error saving entry:", error);
-    alert("Failed to save entry. Please try again.");
   }
 }
 
 // Load entries from Firestore
 async function loadEntries() {
-  const user = auth.currentUser;
-  if (!user) {
-    entriesList.innerHTML = "<p>Please log in to view your entries.</p>";
-    return;
-  }
-
   try {
-    const snapshot = await db.collection("users").doc(user.uid).collection("entries").get();
-    entriesList.innerHTML = ""; // Clear the list before appending
-
-    snapshot.forEach((doc) => {
+    const snapshot = await db.collection("entries").get();
+    entriesList.innerHTML = "";
+    snapshot.forEach(doc => {
       const entry = doc.data();
       const li = document.createElement("li");
-      li.innerHTML = `
-        <span><strong>${entry.date}</strong>: ${entry.exercise} for ${entry.duration} minutes (${entry.caloriesBurned} cal)</span>
-        <button data-id="${doc.id}" class="delete-btn">Delete</button>
-      `;
+      li.textContent = `${entry.date}: ${entry.exercise} for ${entry.duration} minutes (${entry.caloriesBurned} cal)`;
       entriesList.appendChild(li);
-    });
-
-    // Add delete functionality
-    document.querySelectorAll(".delete-btn").forEach((button) => {
-      button.addEventListener("click", (e) => {
-        const entryId = e.target.getAttribute("data-id");
-        deleteEntry(entryId);
-      });
     });
   } catch (error) {
     console.error("Error loading entries:", error);
-    alert("Failed to load entries. Please try again.");
-  }
-}
-
-// Delete entry from Firestore
-async function deleteEntry(entryId) {
-  const user = auth.currentUser;
-  if (!user) {
-    alert("You must be logged in to delete an entry!");
-    return;
-  }
-
-  try {
-    await db.collection("users").doc(user.uid).collection("entries").doc(entryId).delete();
-    console.log("Entry deleted successfully:", entryId);
-    loadEntries(); // Refresh the entries list
-  } catch (error) {
-    console.error("Error deleting entry:", error);
-    alert("Failed to delete entry. Please try again.");
   }
 }
 
@@ -117,17 +56,11 @@ trackerForm.addEventListener("submit", (e) => {
   const date = document.getElementById("date").value;
 
   const exerciseType = exercise === "Custom" ? customExercise : exercise;
-  const caloriesBurned = calculateCalories(exerciseType, duration, weight);
+  const caloriesBurned = Math.round(0.0175 * duration * weight);
 
   saveEntry({ exercise: exerciseType, duration, weight, date, caloriesBurned });
   trackerForm.reset();
 });
 
-// Initialize the app
-auth.onAuthStateChanged((user) => {
-  if (user) {
-    loadEntries();
-  } else {
-    entriesList.innerHTML = "<p>Please log in to view your entries.</p>";
-  }
-});
+// Load entries on page load
+loadEntries();

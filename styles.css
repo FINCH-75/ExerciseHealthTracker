@@ -1,87 +1,41 @@
-/* Styling Reset */
 body {
-  font-family: 'Arial', sans-serif;
+  font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
   background-color: #f4f4f9;
-  color: #333;
 }
 
-/* Header Styling */
 header {
   background-color: #4caf50;
   color: white;
   padding: 1.5rem;
   text-align: center;
   font-size: 1.8rem;
-  font-weight: bold;
-  text-transform: uppercase;
-}
-
-/* Main Form Styling */
-main {
-  padding: 20px;
-  max-width: 800px;
-  margin: auto;
 }
 
 form {
+  max-width: 600px;
+  margin: 20px auto;
   background: #fff;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
 }
 
-form label {
+label {
   display: block;
   margin-top: 10px;
-  font-weight: bold;
 }
 
-form select,
-form input {
+input, select, button {
   width: 100%;
   padding: 10px;
   margin-top: 5px;
-  margin-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
 
-form button {
-  margin-top: 20px;
-  padding: 10px 20px;
+button {
   background-color: #4caf50;
   color: white;
-  border: none;
-  border-radius: 4px;
   cursor: pointer;
-  font-weight: bold;
-  font-size: 1rem;
-}
-
-form button:hover {
-  background-color: #45a049;
-}
-
-/* Entries List */
-ul {
-  list-style: none;
-  padding: 0;
-}
-
-li {
-  background: #fff;
-  padding: 15px;
-  border: 1px solid #ddd;
-  margin-bottom: 10px;
-  border-radius: 4px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-li strong {
-  font-weight: bold;
 }
