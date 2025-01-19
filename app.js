@@ -3,7 +3,7 @@ const SUPABASE_URL = "https://fvymmmusiargiibfeuyb.supabase.co";
 const SUPABASE_ANON_KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ2eW1tbXVzaWFyZ2lpYmZldXliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzczMTM1OTIsImV4cCI6MjA1Mjg4OTU5Mn0.WXMvsI08VyNq4URu-Fz59cDDIsRPHIDoGF2IdP5JaUA";
 
-// Initialize Supabase
+// Initialize Supabase using the global `supabase` object
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // Elements
