@@ -84,8 +84,9 @@ trackerForm.addEventListener("submit", (e) => {
   const customExercise = document.getElementById("custom-exercise").value.trim();
   const duration = parseInt(document.getElementById("duration").value, 10);
   const weight = parseInt(document.getElementById("weight").value, 10);
-  const date = new Date().toLocaleDateString();
+  const dateInput = document.getElementById("date").value;
 
+  const date = dateInput || new Date().toLocaleDateString();
   const exerciseType = exercise === "Custom" ? customExercise : exercise;
   const burnRate = calorieBurnRates[exerciseType] || calorieBurnRates["Custom"];
   const caloriesBurned = Math.round(burnRate * weight * duration);
@@ -99,4 +100,10 @@ trackerForm.addEventListener("submit", (e) => {
   saveData(data);
 
   // Refresh UI
-  load
+  loadUserEntries();
+  loadLeaderboard();
+  trackerForm.reset();
+});
+
+// Initialize leaderboard on load
+loadLeaderboard();
