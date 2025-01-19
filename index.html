@@ -3,36 +3,47 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Health Competition Tracker</title>
+  <title>Health Tracker & Leaderboard</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header>
-    <h1>Health Competition Tracker</h1>
+    <h1>Health Tracker & Leaderboard</h1>
   </header>
   <main>
-    <form id="tracker-form">
-      <h2>Add Your Exercise</h2>
-      <label for="name">Your Name:</label>
-      <input type="text" id="name" name="name" placeholder="Enter your name" required>
-
-      <label for="exercise">Exercise Type:</label>
-      <select id="exercise" name="exercise" required>
-        <option value="Running">Running</option>
-        <option value="Cycling">Cycling</option>
-        <option value="Walking">Walking</option>
-        <option value="Weightlifting">Weightlifting</option>
-        <option value="Custom">Custom</option>
-      </select>
-
-      <label for="duration">Duration (minutes):</label>
-      <input type="number" id="duration" name="duration" placeholder="e.g., 30" required>
-
-      <label for="weight">Your Weight (lbs):</label>
-      <input type="number" id="weight" name="weight" placeholder="e.g., 180" required>
-
-      <button type="submit">Add Entry</button>
+    <form id="name-form">
+      <label for="username">Enter Your Name:</label>
+      <input type="text" id="username" placeholder="Your Name" required>
+      <button type="submit">Start Tracking</button>
     </form>
+
+    <section id="tracker-section" class="hidden">
+      <h2>Welcome, <span id="display-name"></span>!</h2>
+      <form id="tracker-form">
+        <h3>Add Exercise Entry</h3>
+        <label for="exercise">Exercise Type:</label>
+        <select id="exercise" name="exercise" required>
+          <option value="Running">Running</option>
+          <option value="Cycling">Cycling</option>
+          <option value="Walking">Walking</option>
+          <option value="Weightlifting">Weightlifting</option>
+          <option value="Custom">Custom</option>
+        </select>
+        <input type="text" id="custom-exercise" placeholder="Enter custom exercise">
+        <label for="duration">Duration (minutes):</label>
+        <input type="number" id="duration" placeholder="e.g., 30" required>
+        <label for="weight">Your Weight (lbs):</label>
+        <input type="number" id="weight" placeholder="e.g., 180" required>
+        <button type="submit">Add Entry</button>
+      </form>
+
+      <section>
+        <h3>Your Exercise Entries</h3>
+        <ul id="user-entries">
+          <!-- User-specific entries will be listed here -->
+        </ul>
+      </section>
+    </section>
 
     <section>
       <h2>Leaderboard</h2>
@@ -44,7 +55,7 @@
           </tr>
         </thead>
         <tbody>
-          <!-- Leaderboard entries will go here -->
+          <!-- Leaderboard data will be displayed here -->
         </tbody>
       </table>
     </section>
